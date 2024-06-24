@@ -58,9 +58,20 @@
 <body>
 <section layout:fragment="content">
   <h1>Products List</h1>
-  <div class="d-flex justify-content-between align-items-center mb-3">
+<!--  <div class="d-flex justify-content-between align-items-center mb-3">
     <input type="text" id="searchInput" placeholder="Search by name" class="form-control">
     <button onclick="searchProducts()" class="btn btn-primary">Search</button>
+  </div>-->
+  <div>
+
+      <div  sec:authorize="hasAnyAuthority('ADMIN')">
+        <a th:href="@{~/products/add}" class="btn btn-primary">Create New Product</a>
+      </div>
+      <div   sec:authorize="hasAnyAuthority('ADMIN')">
+        <a th:href="@{/categories/add}" class="btn btn-primary">Add New Category</a>
+      </div>
+
+
   </div>
   <table class="table table-bordered table-hover">
     <thead class="table-dark">
@@ -69,7 +80,7 @@
       <th>Name</th>
       <th>Image</th>
       <th>Price</th>
-      <th>Description</th>
+   <!--   <th>Description</th>-->
       <th>Category Name</th>
       <th>Actions</th>
     <!--  <th>Add To Cart</th>-->
@@ -81,16 +92,30 @@
       <td th:text="${product.name}"></td>
       <td><img th:src="${product.ImgUrl}" width="100px" height="100px"></td>
       <td th:text="${product.price}"></td>
-      <td th:text="${product.description}"></td>
+<!--      <td th:text="${product.description}"></td>-->
       <td th:text="${product.category.name}"></td>
       <td>
         <div sec:authorize="hasAuthority('ADMIN')">
           <a th:href="@{/products/edit/{id}(id=${product.id})}"
              class="btn btn-success btn-sm">Sửa</a>
-          <a th:href="@{/products/delete/{id}(id=${product.id})}"
-             class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc không?')">Xóa</a>
+
+        </div>
+        <div sec:authorize="hasAuthority('USER')">
+          <a th:href="@{/products/edit/{id}(id=${product.id})}"
+             class="btn btn-success btn-sm">Sửa</a>
+
+        </div>
+        <div sec:authorize="hasAuthority('SALES')">
+          <a th:href="@{/products/edit/{id}(id=${product.id})}"
+             class="btn btn-success btn-sm">Sửa</a>
+
+        </div>
+        <div sec:authorize="hasAuthority('ADMIN')">
+        <a th:href="@{/products/delete/{id}(id=${product.id})}"
+           class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc không?')">Xóa</a>
         </div>
       </td>
+
     <!--  <td>
         <form th:action="@{/cart/add}" method="post"
               sec:authorize="isAuthenticated()">
